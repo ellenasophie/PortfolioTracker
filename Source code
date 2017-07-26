@@ -1,0 +1,148 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+public class PortfolioTracker {
+
+	public static void main(String[] args) {
+		BufferedReader br = null;
+		
+		BufferedWriter writer = null;
+		
+		FileReader fr = null;
+	    
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		try {
+			
+			System.out.println("Going To Start");
+
+			fr = new FileReader(System.getProperty("user.dir")+"//portfolio.txt");
+		
+			writer = new BufferedWriter(new FileWriter(System.getProperty("user.dir")+"//output.txt"));
+			
+			br = new BufferedReader(fr);
+			
+			String[] splited=null;
+			
+			String sCurrentLine;
+			
+			int count=0;
+			
+			//Reading the input file
+			
+			System.out.println("Reading Input file");
+			
+			while ((sCurrentLine = br.readLine()) != null) {
+			
+				splited = sCurrentLine.split("\\s+");
+				
+				for (String part : splited)
+				
+				{
+				
+					String[] line=part.split(",");
+			        
+					for (String part1 : line)
+			        
+					{
+			        
+						String parts[] = part1.split("-");
+			            
+						map.put(parts[0], Integer.parseInt(parts[1]));
+						
+					}
+			        
+					Set<Entry<String, Integer>> set = map.entrySet();
+		            
+					List<Entry<String, Integer>> list = new ArrayList<Entry<String, Integer>>(set);
+		            
+					Collections.sort( list, new Comparator<Map.Entry<String, Integer>>()
+		            
+							{
+		                    
+						public int compare( Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2 )
+		                
+						{
+		                
+							return (o2.getValue()).compareTo( o1.getValue() );
+		                    
+						}
+		                
+							} );
+		                
+					for(Map.Entry<String, Integer> entry:list)
+		            
+					{
+		            
+						System.out.println(entry.getKey()+"-"+entry.getValue());
+		                
+						writer.write(entry.getKey()+"-"+entry.getValue());
+		                
+						writer.write(",");
+		                
+					} 
+					
+					writer.newLine();
+			        
+					map.clear();
+			        
+					count++;   
+			      
+				}
+				
+			}
+			
+			writer.close();
+		
+		} 
+		
+		catch (IOException e) 
+		
+		{
+
+			e.printStackTrace();
+
+		}
+		
+		finally 
+		
+		{
+
+			try 
+			
+			{
+
+				if (br != null)
+			
+					br.close();
+
+				if (fr != null)
+					
+					fr.close();
+
+			} 
+			
+			catch (IOException ex) 
+			
+			{
+
+				ex.printStackTrace();
+
+			}
+
+		}
+
+		
+	}
+
+}
